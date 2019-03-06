@@ -7,6 +7,30 @@ public class USACO {
   public static int bronze(String filename) throws FileNotFoundException{
     int[][] pasture;
     //read first line
+
+    int[] specs = readBronzeSpecs(filename);
+    int rows = specs[0];
+    int cols = specs[1];
+    int elevation = specs[2];
+    int numRules = specs[3];
+
+    System.out.println(rows + "\n"+cols+"\n"+elevation+"\n"+numRules);
+
+    pasture = readBronzeBoard(filename, rows, cols);
+
+    for (int i = 0; i < pasture.length; i++) {
+      for (int j = 0; j < pasture[i].length; j++) {
+        System.out.print(pasture[i][j] + " ");
+      }
+      System.out.println();
+    }
+
+
+
+    return 0;
+  }
+
+  private static int[] readBronzeSpecs(String filename) throws FileNotFoundException {
     Scanner in = new Scanner(new File(filename));
     String dimensions = in.nextLine();
     int index = dimensions.indexOf(' ');
@@ -18,30 +42,23 @@ public class USACO {
     index = dimensions.indexOf(' ');
     int elevation = Integer.parseInt(dimensions.substring(0, index));
     int numRules = Integer.parseInt(dimensions.substring(index+1));
+    return new int[] {rows, cols, elevation, numRules};
+  }
 
-    pasture = new int[rows][cols];
-
-    //System.out.println(rows + "\n"+cols+"\n"+elevation+"\n"+numRules);
-
-    for (int i = 0; i < rows; i++) {
+  private static int[][] readBronzeBoard(String filename, int r, int c) throws FileNotFoundException {
+    int[][] ans = new int[r][c];
+    Scanner in = new Scanner(new File(filename));
+    in.nextLine();
+    for (int i = 0; i < r; i++) {
       String row = in.nextLine();
-      for (int j = 0; j < cols - 1; j++) {
+      for (int j = 0; j < c - 1; j++) {
         int space = row.indexOf(' ');
-        pasture[i][j] = Integer.parseInt(row.substring(0, space));
+        ans[i][j] = Integer.parseInt(row.substring(0, space));
         row = row.substring(space+1);
       }
-      pasture[i][cols-1] = Integer.parseInt(row);
+      ans[i][c-1] = Integer.parseInt(row);
     }
-
-    /*
-    for (int i = 0; i < pasture.length; i++) {
-      for (int j = 0; j < pasture[i].length; j++) {
-        System.out.print(pasture[i][j] + " ");
-      }
-      System.out.println();
-    }
-    */
-    return 0;
+    return ans;
   }
 
   public static int silver(String filename) throws FileNotFoundException{
