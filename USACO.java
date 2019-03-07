@@ -13,19 +13,20 @@ public class USACO {
     int cols = specs[1];
     int elevation = specs[2];
     int numRules = specs[3];
-
-    System.out.println(rows + "\n"+cols+"\n"+elevation+"\n"+numRules);
+    //System.out.println(rows + "\n"+cols+"\n"+elevation+"\n"+numRules);
 
     pasture = readBronzeBoard(filename, rows, cols);
-
+    /*
     for (int i = 0; i < pasture.length; i++) {
       for (int j = 0; j < pasture[i].length; j++) {
         System.out.print(pasture[i][j] + " ");
       }
       System.out.println();
     }
+    */
 
-
+    ArrayList<Instruction> instructions = readBronzeInstructions(filename, rows);
+    //System.out.println(instructions);
 
     return 0;
   }
@@ -61,6 +62,16 @@ public class USACO {
     return ans;
   }
 
+  private static ArrayList<Instruction> readBronzeInstructions(String filename, int r) throws FileNotFoundException {
+    ArrayList<Instruction> ans = new ArrayList<Instruction>();
+    Scanner in = new Scanner(new File(filename));
+    for (int i = 0; i <= r; i++) in.nextLine();
+    while (in.hasNextLine()) {
+      ans.add(new Instruction(in.nextLine()));
+    }
+    return ans;
+  }
+
   public static int silver(String filename) throws FileNotFoundException{
     return 0;
   }
@@ -85,5 +96,21 @@ class Instruction {
     i = rule.indexOf(' ');
     c = Integer.parseInt(rule.substring(0, i));
     depth = Integer.parseInt(rule.substring(i+1));
+  }
+
+  public int row() {
+    return r;
+  }
+
+  public int col() {
+    return c;
+  }
+
+  public int depth() {
+    return depth;
+  }
+
+  public String toString() {
+    return r + " " + c + " " + depth;
   }
 }
