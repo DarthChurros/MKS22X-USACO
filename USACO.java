@@ -32,7 +32,19 @@ public class USACO {
     //
     //}
 
-    return 0;
+    for (int i = 0; i < instructions.size(); i++) {
+      stomp(pasture, instructions.get(i));
+    }
+
+    int volume = 0;
+
+    for (int i = 0; i < pasture.length; i++) {
+      for (int j = 0; j < pasture[i].length; j++) {
+        volume += Math.max(0, elevation - pasture[i][j]);
+      }
+    }
+    volume *= 5184;
+    return volume;
   }
 
   private static int[] readBronzeSpecs(String filename) throws FileNotFoundException {
@@ -76,7 +88,7 @@ public class USACO {
     return ans;
   }
 
-  private static int[] stomp(int[][] pasture, Instruction inst) {
+  private static void stomp(int[][] pasture, Instruction inst) {
     int r = inst.row();
     int c = inst.col();
     for (int i = 0; i < 3; i++) {
@@ -87,7 +99,16 @@ public class USACO {
         }
       }
     }
-    return new int[] {r, c};
+
+    int elev = pasture[r][c] - inst.depth();
+
+    for (int i = 0; i < 3; i++) {
+      for (int j = 0; j < 3; j++) {
+        if (pasture[inst.row()+i][inst.col()+j] > elev) {
+          pasture[inst.row()+i][inst.col()+j] = elev;
+        }
+      }
+    }
   }
 
   public static int ctravel(String filename) throws FileNotFoundException{
@@ -96,7 +117,7 @@ public class USACO {
 
   public static void main(String[] args) {
     try {
-      makelake("makelake.in");
+      System.out.println("makelake: "+makelake("makelake.in"));
     } catch (FileNotFoundException e) {}
   }
 }
@@ -109,10 +130,10 @@ class Instruction {
 
   public Instruction (String rule) {
     int i = rule.indexOf(' ');
-    r = Integer.parseInt(rule.substring(0, i));
+    r = Integer.parseInt(rule.substring(0, i))-1;
     rule = rule.substring(i+1);
     i = rule.indexOf(' ');
-    c = Integer.parseInt(rule.substring(0, i));
+    c = Integer.parseInt(rule.substring(0, i))-1;
     depth = Integer.parseInt(rule.substring(i+1));
   }
 
