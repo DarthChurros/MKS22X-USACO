@@ -28,7 +28,9 @@ public class USACO {
     ArrayList<Instruction> instructions = readBronzeInstructions(filename, rows);
     //System.out.println(instructions);
 
-
+    //for (int i = 0; i < instructions.size(); i++) {
+    //
+    //}
 
     return 0;
   }
@@ -72,6 +74,20 @@ public class USACO {
       ans.add(new Instruction(in.nextLine()));
     }
     return ans;
+  }
+
+  private static int[] stomp(int[][] pasture, Instruction inst) {
+    int r = inst.row();
+    int c = inst.col();
+    for (int i = 0; i < 3; i++) {
+      for (int j = 0; j < 3; j++) {
+        if (pasture[inst.row()+i][inst.col()+j] > pasture[r][c]){
+          r = inst.row()+i;
+          c = inst.col()+j;
+        }
+      }
+    }
+    return new int[] {r, c};
   }
 
   public static int ctravel(String filename) throws FileNotFoundException{
