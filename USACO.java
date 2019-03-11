@@ -70,7 +70,11 @@ public class USACO {
       String row = in.nextLine();
       for (int j = 0; j < c - 1; j++) {
         int space = row.indexOf(' ');
-        ans[i][j] = Integer.parseInt(row.substring(0, space));
+        if (row.substring(0, space) == "*") {
+          ans[i][j] = -1;
+        } else {
+          ans[i][j] = Integer.parseInt(row.substring(0, space));
+        }
         row = row.substring(space+1);
       }
       ans[i][c-1] = Integer.parseInt(row);
@@ -127,8 +131,31 @@ public class USACO {
 
     pasture = readBoard(filename, rows, cols);
 
-    while (pasture[])
-    return 0;
+    for (int t = 0; t < time; t++) {
+      for (int i = 0; i < rows; i++) {
+        for (int j = (t+rows) % 2; j < cols; j+=2) {
+          if (pasture[i][j] >= 0) {
+            if (i > 0 && i <= rows && pasture[i-1][j] >= 0) {
+              pasture[i][j] += pasture[i-1][j];
+              pasture[i-1][j] = 0;
+            }
+            if (i >= -1 && i < rows - 1 && pasture[i+1][j] >= 0) {
+              pasture[i][j] += pasture[i-1][j];
+              pasture[i+1][j] = 0;
+            }
+            if (j > 0 && j <= cols && pasture[i][j-1] >= 0) {
+              pasture[i][j] += pasture[i-1][j];
+              pasture[i][j-1] = 0;
+            }
+            if (j >= -1 && i < rows - 1 && pasture[i][j+1] >= 0) {
+              pasture[i][j] += pasture[i][j+1];
+              pasture[i][j+1] = 0;
+            }
+          }
+        }
+      }
+    }
+    return pasture[r2][c2];
   }
 
   private static int[] readSilverSpecs(String filename, int r, int c) throws FileNotFoundException {
@@ -163,7 +190,7 @@ public class USACO {
 
   public static void main(String[] args) {
     try {
-      System.out.println("makelake: "+makelake("makelake.in"));
+      System.out.println("ctravel: "+makelake("makelake.in"));
     } catch (FileNotFoundException e) {}
   }
 }
