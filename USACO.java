@@ -119,6 +119,12 @@ public class USACO {
     cols = specs[1];
     time = specs[2];
 
+    int[] coords = readSilverSpecs(filename, rows);
+    r1 = coords[0];
+    r2 = coords[1];
+    r1 = coords[2];
+    r2 = coords[3];
+
     pasture = readBoard(filename, rows, cols);
 
     while (pasture[])
