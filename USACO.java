@@ -15,7 +15,7 @@ public class USACO {
     int numRules = specs[3];
     //System.out.println(rows + "\n"+cols+"\n"+elevation+"\n"+numRules);
 
-    pasture = readBoard(filename, rows, cols);
+    pasture = readBronzeBoard(filename, rows, cols);
     /*
     for (int i = 0; i < pasture.length; i++) {
       for (int j = 0; j < pasture[i].length; j++) {
@@ -62,7 +62,7 @@ public class USACO {
     return new int[] {rows, cols, elevation, numRules};
   }
 
-  private static int[][] readBoard(String filename, int r, int c) throws FileNotFoundException {
+  private static int[][] readBronzeBoard(String filename, int r, int c) throws FileNotFoundException {
     int[][] ans = new int[r][c];
     Scanner in = new Scanner(new File(filename));
     in.nextLine();
@@ -70,11 +70,7 @@ public class USACO {
       String row = in.nextLine();
       for (int j = 0; j < c - 1; j++) {
         int space = row.indexOf(' ');
-        if (row.substring(0, space) == "*") {
-          ans[i][j] = -1;
-        } else {
-          ans[i][j] = Integer.parseInt(row.substring(0, space));
-        }
+        ans[i][j] = Integer.parseInt(row.substring(0, space));
         row = row.substring(space+1);
       }
       ans[i][c-1] = Integer.parseInt(row);
@@ -119,46 +115,49 @@ public class USACO {
     int[][] pasture;
 
     int[] specs = readSilverSpecs(filename);
-    rows = specs[0];
-    cols = specs[1];
-    time = specs[2];
+    int rows = specs[0];
+    int cols = specs[1];
+    int time = specs[2];
 
-    int[] coords = readSilverSpecs(filename, rows);
-    r1 = coords[0];
-    r2 = coords[1];
-    r1 = coords[2];
-    r2 = coords[3];
+    int[] coords = readSilverCoords(filename, rows);
+    int r1 = coords[0]-1;
+    int c1 = coords[1]-1;
+    int r2 = coords[2]-1;
+    int c2 = coords[3]-1;
 
-    pasture = readBoard(filename, rows, cols);
+    pasture = readSilverBoard(filename, rows, cols);
 
-    for (int t = 0; t < time; t++) {
+    pasture[r1][c1] = 1;
+
+    for (int t = 1; t <= time; t++) {
       for (int i = 0; i < rows; i++) {
-        for (int j = (t+rows) % 2; j < cols; j+=2) {
+        for (int j = (t+i+r1+c1) % 2; j < cols; j+=2) {
           if (pasture[i][j] >= 0) {
-            if (i > 0 && i <= rows && pasture[i-1][j] >= 0) {
+            if (i > 0 && pasture[i-1][j] >= 0) {
               pasture[i][j] += pasture[i-1][j];
-              pasture[i-1][j] = 0;
             }
-            if (i >= -1 && i < rows - 1 && pasture[i+1][j] >= 0) {
-              pasture[i][j] += pasture[i-1][j];
-              pasture[i+1][j] = 0;
+            if (i < rows - 1 && pasture[i+1][j] >= 0) {
+              pasture[i][j] += pasture[i+1][j];
             }
-            if (j > 0 && j <= cols && pasture[i][j-1] >= 0) {
-              pasture[i][j] += pasture[i-1][j];
-              pasture[i][j-1] = 0;
+            if (j > 0 && pasture[i][j-1] >= 0) {
+              pasture[i][j] += pasture[i][j-1];
             }
-            if (j >= -1 && i < rows - 1 && pasture[i][j+1] >= 0) {
+            if (j < cols - 1 && pasture[i][j+1] >= 0) {
               pasture[i][j] += pasture[i][j+1];
-              pasture[i][j+1] = 0;
             }
           }
+        }
+      }
+      for (int i = 0; i < rows; i++) {
+        for (int j = (t+i+r1+c1+1) % 2; j < cols; j+=2) {
+          if (pasture[i][j] >= 0) pasture[i][j] = 0;
         }
       }
     }
     return pasture[r2][c2];
   }
 
-  private static int[] readSilverSpecs(String filename, int r, int c) throws FileNotFoundException {
+  private static int[] readSilverSpecs(String filename) throws FileNotFoundException {
     Scanner in = new Scanner(new File(filename));
     String dimensions = in.nextLine();
     int index = dimensions.indexOf(' ');
@@ -172,25 +171,45 @@ public class USACO {
 
   private static int[] readSilverCoords(String filename, int r) throws FileNotFoundException {
     Scanner in = new Scanner(new File(filename));
-    for (int i = 0; i < r; i++) {
+    for (int i = 0; i <= r; i++) {
       in.nextLine();
     }
     String line = in.nextLine();
-    int index = dimensions.indexOf(' ');
-    int r1 = Integer.parseInt(dimensions.substring(0, index));
-    dimensions = dimensions.substring(index+1);
-    index = dimensions.indexOf(' ');
-    int c1 = Integer.parseInt(dimensions.substring(0, index));
-    dimensions = dimensions.substring(index+1);
-    index = dimensions.indexOf(' ');
-    int r2 = Integer.parseInt(dimensions.substring(0, index));
-    int c2 = Integer.parseInt(dimensions.substring(index+1));
+    int index = line.indexOf(' ');
+    int r1 = Integer.parseInt(line.substring(0, index));
+    line = line.substring(index+1);
+    index = line.indexOf(' ');
+    int c1 = Integer.parseInt(line.substring(0, index));
+    line = line.substring(index+1);
+    index = line.indexOf(' ');
+    int r2 = Integer.parseInt(line.substring(0, index));
+    int c2 = Integer.parseInt(line.substring(index+1));
     return new int[] {r1, c1, r2, c2};
+  }
+
+  private static int[][] readSilverBoard(String filename, int r, int c) throws FileNotFoundException {
+    int[][] ans =  new int[r][c];
+    Scanner in = new Scanner(new File(filename));
+    in.nextLine();
+    for (int i = 0; i < r; i++) {
+      String line = in.nextLine();
+      for (int j = 0; j < c; j++) {
+        switch (line.charAt(j)) {
+          case '.': ans[i][j] = 0;
+          break;
+          case '*': ans[i][j] = -1;
+          break;
+          default: throw new IllegalStateException("illegal character");
+        }
+      }
+    }
+    return ans;
   }
 
   public static void main(String[] args) {
     try {
-      System.out.println("ctravel: "+makelake("makelake.in"));
+      System.out.println("makelake: "+makelake("testCases/makelake."+args[0]+".in"));
+      System.out.println("ctravel: "+ctravel("testCases/ctravel."+args[0]+".in"));
     } catch (FileNotFoundException e) {}
   }
 }
