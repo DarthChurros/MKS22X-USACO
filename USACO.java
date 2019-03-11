@@ -114,7 +114,14 @@ public class USACO {
   public static int ctravel(String filename) throws FileNotFoundException {
     int[][] pasture;
 
+    int[] specs = readSilverSpecs(filename);
+    rows = specs[0];
+    cols = specs[1];
+    time = specs[2];
 
+    pasture = readBoard(filename, rows, cols);
+
+    while (pasture[])
     return 0;
   }
 
@@ -128,6 +135,24 @@ public class USACO {
     int cols = Integer.parseInt(dimensions.substring(0, index));
     int time = Integer.parseInt(dimensions.substring(index+1));
     return new int[] {rows, cols, time};
+  }
+
+  private static int[] readSilverCoords(String filename, int r) throws FileNotFoundException {
+    Scanner in = new Scanner(new File(filename));
+    for (int i = 0; i < r; i++) {
+      in.nextLine();
+    }
+    String line = in.nextLine();
+    int index = dimensions.indexOf(' ');
+    int r1 = Integer.parseInt(dimensions.substring(0, index));
+    dimensions = dimensions.substring(index+1);
+    index = dimensions.indexOf(' ');
+    int c1 = Integer.parseInt(dimensions.substring(0, index));
+    dimensions = dimensions.substring(index+1);
+    index = dimensions.indexOf(' ');
+    int r2 = Integer.parseInt(dimensions.substring(0, index));
+    int c2 = Integer.parseInt(dimensions.substring(index+1));
+    return new int[] {r1, c1, r2, c2};
   }
 
   public static void main(String[] args) {
