@@ -15,7 +15,7 @@ public class USACO {
     int numRules = specs[3];
     //System.out.println(rows + "\n"+cols+"\n"+elevation+"\n"+numRules);
 
-    pasture = readBronzeBoard(filename, rows, cols);
+    pasture = readBoard(filename, rows, cols);
     /*
     for (int i = 0; i < pasture.length; i++) {
       for (int j = 0; j < pasture[i].length; j++) {
@@ -62,7 +62,7 @@ public class USACO {
     return new int[] {rows, cols, elevation, numRules};
   }
 
-  private static int[][] readBronzeBoard(String filename, int r, int c) throws FileNotFoundException {
+  private static int[][] readBoard(String filename, int r, int c) throws FileNotFoundException {
     int[][] ans = new int[r][c];
     Scanner in = new Scanner(new File(filename));
     in.nextLine();
@@ -111,8 +111,23 @@ public class USACO {
     }
   }
 
-  public static int ctravel(String filename) throws FileNotFoundException{
+  public static int ctravel(String filename) throws FileNotFoundException {
+    int[][] pasture;
+
+
     return 0;
+  }
+
+  private static int[] readSilverSpecs(String filename, int r, int c) throws FileNotFoundException {
+    Scanner in = new Scanner(new File(filename));
+    String dimensions = in.nextLine();
+    int index = dimensions.indexOf(' ');
+    int rows = Integer.parseInt(dimensions.substring(0, index));
+    dimensions = dimensions.substring(index+1);
+    index = dimensions.indexOf(' ');
+    int cols = Integer.parseInt(dimensions.substring(0, index));
+    int time = Integer.parseInt(dimensions.substring(index+1));
+    return new int[] {rows, cols, time};
   }
 
   public static void main(String[] args) {
