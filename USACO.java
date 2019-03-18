@@ -4,7 +4,7 @@ import java.util.Scanner;
 import java.util.ArrayList;
 
 public class USACO {
-  public static int makelake(String filename) throws FileNotFoundException{
+  public static int bronze(String filename) throws FileNotFoundException{
     int[][] pasture;
     //read first line
 
@@ -111,7 +111,7 @@ public class USACO {
     }
   }
 
-  public static int ctravel(String filename) throws FileNotFoundException {
+  public static int silver(String filename) throws FileNotFoundException {
     int[][] pasture;
 
     int[] specs = readSilverSpecs(filename);
@@ -208,8 +208,8 @@ public class USACO {
 
   public static void main(String[] args) {
     try {
-      System.out.println("makelake: "+makelake("testCases/makelake."+args[0]+".in"));
-      System.out.println("ctravel: "+ctravel("testCases/ctravel."+args[0]+".in"));
+      System.out.println("makelake: "+bronze("testCases/makelake."+args[0]+".in"));
+      System.out.println("ctravel: "+silver("testCases/ctravel."+args[0]+".in"));
     } catch (FileNotFoundException e) {}
   }
 }
